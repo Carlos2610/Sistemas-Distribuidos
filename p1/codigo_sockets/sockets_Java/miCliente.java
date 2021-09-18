@@ -29,7 +29,7 @@ public class miCliente {
 
         try{
             while(option!=0 && option!=3){
-                System.out.println("[1] Operacion lógica");
+                System.out.println("[1] Operacion lógica (suma,resta,mult,div)");
                 System.out.println("[2] Cuentacaracteres");
                 System.out.println("[3] Salir");
 
@@ -51,6 +51,90 @@ public class miCliente {
             System.out.println("ERROR: "+ e.getMessage());
         }
         
+    }
+
+    public void pedirOperacionLógica(String str_host, String str_port){
+
+        InputStreamReader reader = new InputStreamReader(System.in);
+        BufferedReader br = new BufferedReader(reader);
+
+        boolean pedirOp = true;
+        boolean resultIsOk = false;
+
+        try{
+
+            Socket sockCli = new Socket(str_host, Integer.parseInt(str_port));
+
+            while(pedirOp){
+
+                resultIsOk = doOperation();
+
+                if(resultIsOk){
+                    System.out.println("Operacion correcta");
+                }else{
+                    System.out.println("Operacion incorrecta");
+
+                }
+                
+
+            }
+
+        }catch(Exception e){
+
+            System.out.println("ERROR: "+ e.getMessage());
+        }
+
+    }
+
+    public boolean doOperation(){
+        boolean isCorrect = false;
+        String operation = "";
+        int leftOp, rightOp, result;
+        
+
+        InputStreamReader isr = new InputStreamReader(System.in);
+		BufferedReader br = new BufferedReader (isr);
+
+        try{
+            System.out.println("Introduce primer operando");
+            leftOp = Integer.parseInt(br.readLine());
+
+            System.out.println("Introduce operador");
+            operation = br.readLine();
+
+            System.out.println("Introduce segundo operando");
+            rightOp = Integer.parseInt(br.readLine());
+
+            System.out.println("Introduce resultado");
+            result = Integer.parseInt(br.readLine());
+
+
+
+
+            if(operation.compareTo("+")==0){
+                if((leftOp + rightOp) == result ){
+                    isCorrect = true;
+                }
+            }else if(operation.compareTo("*")==0){
+                if((leftOp * rightOp) == result ){
+                    isCorrect = true;
+                }
+            }else if(operation.compareTo("/")==0){
+                if((leftOp / rightOp) == result ){
+                    isCorrect = true;
+                }    
+            }else if(operation.compareTo("-")==0){
+                if((leftOp + rightOp) == result ){
+                    isCorrect = true;
+                }
+            }else{
+                System.out.println("Entrada incorrecta");
+            }    
+        }catch(Exception e){
+            System.out.println("ERROR: "+e.getMessage());
+        }
+        
+        return isCorrect;
     }
     
     
