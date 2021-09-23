@@ -25,13 +25,13 @@ public class miCliente {
     }
 
     public void menu(String host, String port){
-        int option = 0;
+        int option = -1;
 
         try{
-            while(option!=0 && option!=3){
+            while(option!=2){
                 System.out.println("[1] Operacion lógica (suma,resta,mult,div)");
-                System.out.println("[2] Cuentacaracteres");
-                System.out.println("[3] Salir");
+                System.out.println("[2] Salir");
+                
 
                 InputStreamReader reader = new InputStreamReader(System.in);
                 BufferedReader br = new BufferedReader(reader);
@@ -67,7 +67,7 @@ public class miCliente {
 
             while(pedirOp){
 
-                resultIsOk = doOperation();
+                resultIsOk = doOperation(sockCli);
 
                 if(resultIsOk){
                     System.out.println("Operacion correcta");
@@ -86,10 +86,11 @@ public class miCliente {
 
     }
 
-    public boolean doOperation(){
+    public boolean doOperation(Socket server_Sock){
         boolean isCorrect = false;
         String operation = "";
         int leftOp, rightOp, result;
+        String output;
         
 
         InputStreamReader isr = new InputStreamReader(System.in);
@@ -109,7 +110,10 @@ public class miCliente {
             result = Integer.parseInt(br.readLine());
 
 
+            output = leftOp + operation + rightOp + " = " + result;
+            escribeSocket(server_Sock, output);
 
+            output = "";
 
             if(operation.compareTo("+")==0){
                 if((leftOp + rightOp) == result ){
@@ -129,7 +133,7 @@ public class miCliente {
                 }
             }else{
                 System.out.println("Entrada incorrecta");
-            }    
+            }
         }catch(Exception e){
             System.out.println("ERROR: "+e.getMessage());
         }
@@ -137,7 +141,45 @@ public class miCliente {
         return isCorrect;
     }
     
-    
+    /*
+	* Lee datos del socket. Supone que se le pasa un buffer con hueco 
+	*	suficiente para los datos. Devuelve el numero de bytes leidos o
+	* 0 si se cierra fichero o -1 si hay error.
+	*/
+	public String leeSocket (Socket p_sk, String p_Datos)
+	{
+		try
+		{
+			InputStream aux = p_sk.getInputStream();
+			DataInputStream flujo = new DataInputStream( aux );
+			p_Datos = flujo.readUTF();
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error: " + e.toString());
+		}
+      return p_Datos;
+	}
+
+	/*
+	* Escribe dato en el socket cliente. Devuelve numero de bytes escritos,
+	* o -1 si hay error.
+	*/
+	public void escribeSocket (Socket p_sk, String p_Datos)
+	{
+		try
+		{
+			OutputStream aux = p_sk.getOutputStream();
+			DataOutputStream flujo= new DataOutputStream( aux );
+			flujo.writeUTF(p_Datos);      
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error: " + e.toString());
+		}
+		return;
+	}
+	
     
 
 
