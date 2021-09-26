@@ -37,14 +37,13 @@ public class miCliente {
                 BufferedReader br = new BufferedReader(reader);
 
                 option = Integer.parseInt(br.readLine());
-            }
+            
 
-            if(option == 1){
-                //pedir operacion
-            }else if(option == 2){
-                //contarcaracteres
-            }else{
-                System.exit(0);
+                if(option == 1){
+                    pedirOperacionLógica(host,port);
+                }else{
+                    System.exit(0);
+                }
             }
 
         }catch(Exception e){
@@ -75,6 +74,14 @@ public class miCliente {
                     System.out.println("Operacion incorrecta");
 
                 }
+
+                System.out.println("Desea realizar mas operaciones? (s/n)");
+
+                String repeat = br.readLine();
+
+                if(repeat.compareTo("n")==0){
+                    pedirOp = false;
+                }
                 
 
             }
@@ -97,43 +104,40 @@ public class miCliente {
 		BufferedReader br = new BufferedReader (isr);
 
         try{
-            System.out.println("Introduce primer operando");
+            System.out.println("Introduce primer operando: ");
             leftOp = Integer.parseInt(br.readLine());
 
-            System.out.println("Introduce operador");
+            System.out.println("Introduce operador: ");
             operation = br.readLine();
 
-            System.out.println("Introduce segundo operando");
+            System.out.println("Introduce segundo operando: ");
             rightOp = Integer.parseInt(br.readLine());
 
-            System.out.println("Introduce resultado");
+            System.out.println("Introduce resultado: ");
             result = Integer.parseInt(br.readLine());
 
 
-            output = leftOp + operation + rightOp + " = " + result;
-            escribeSocket(server_Sock, output);
+            
 
+            output = leftOp +" "+ operation+" " + rightOp + " " + result;
+
+            
+            escribeSocket(server_Sock,output);
             output = "";
 
-            if(operation.compareTo("+")==0){
-                if((leftOp + rightOp) == result ){
+            output = leeSocket(server_Sock,output);
+            String[] outputParts = output.split(" ");
+            
+            for (String auxString : outputParts) {
+                if(auxString.compareTo("CORRECT")==0){
                     isCorrect = true;
+                }else{
+                    isCorrect = false;
                 }
-            }else if(operation.compareTo("*")==0){
-                if((leftOp * rightOp) == result ){
-                    isCorrect = true;
-                }
-            }else if(operation.compareTo("/")==0){
-                if((leftOp / rightOp) == result ){
-                    isCorrect = true;
-                }    
-            }else if(operation.compareTo("-")==0){
-                if((leftOp + rightOp) == result ){
-                    isCorrect = true;
-                }
-            }else{
-                System.out.println("Entrada incorrecta");
             }
+            System.out.println(output);
+            
+
         }catch(Exception e){
             System.out.println("ERROR: "+e.getMessage());
         }

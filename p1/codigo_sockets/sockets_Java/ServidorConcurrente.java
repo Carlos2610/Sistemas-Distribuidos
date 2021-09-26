@@ -23,7 +23,7 @@ public class ServidorConcurrente {
 			}
 			puerto = args[0];
 			ServerSocket skServidor = new ServerSocket(Integer.parseInt(puerto));
-		    System.out.println("Escucho el puerto " + puerto);
+		    System.out.println("LISTENING TO PORT " + puerto);
 	
 			/*
 			* Mantenemos la comunicacion con el cliente
@@ -34,9 +34,9 @@ public class ServidorConcurrente {
 				* Se espera un cliente que quiera conectarse
 				*/
 				Socket skCliente = skServidor.accept(); // Crea objeto
-		        System.out.println("Sirviendo cliente...");
+		        System.out.println("wAITING FOR CLIENT OPERATION...");
 
-		        Thread t = new HiloServidor(skCliente);
+		        Thread t = new miHiloServidor(skCliente);
 		        t.start();
 			}
 		}
